@@ -2,21 +2,14 @@
 
 var config = require('../config');
 
-function connect() {
-    return config.CONNECTION.connect(function (error) {
-        if (error) {
-            throw error;
-        } else {
-            console.log('Conexión exitosa: OK');
-        }
-    });
-}
-function disconnect(connection) {
-    connection.end();
-    console.log("Desconectado");
-}
+var CONNECTION = config.MY_SQL.createConnection({
+    host: config.MY_SQL_IP,
+    user: config.MY_SQL_USER_DB,
+    password: config.MY_SQL_PASSWORD,
+    database: config.MY_SQL_DB_NAME,
+    port: config.MY_SQL_PORT
+});
 
 module.exports = {
-    connect,
-    disconnect
+    CONNECTION
 };

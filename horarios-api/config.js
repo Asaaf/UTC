@@ -10,16 +10,13 @@ var MY_SQL_IP = 'localhost';
 var MY_SQL_PASSWORD = '';
 var MY_SQL_DB_NAME = 'horarios_db';
 
-var CONNECTION = MY_SQL.createConnection({
-    host: MY_SQL_IP,
-    user: MY_SQL_USER_DB,
-    password: MY_SQL_PASSWORD,
-    database: MY_SQL_DB_NAME,
-    port: MY_SQL_PORT
-});
-
 module.exports = {
     SERVER_IP,
     SERVER_PORT,
-    CONNECTION
+    MY_SQL,
+    MY_SQL_PORT,
+    MY_SQL_USER_DB,
+    MY_SQL_IP,
+    MY_SQL_PASSWORD,
+    MY_SQL_DB_NAME
 };
