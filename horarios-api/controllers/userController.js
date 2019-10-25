@@ -1,8 +1,21 @@
-'use strict';
+/*
+author:         Dasaaf
+version:        0.1
+date:           Octubre del 2019
+description:    El archivo userController contiene todos los métodos CRUD para poder 
+                Crear, Leer(listar, ver, mostrar), Actualizar(modificar) y Eliminar un usuario
+*/
+
+
+
+'use strict';//Activo el modo de uso estricto de javascript
 
 var Usuario = require('../models/userModel');//Declaro un nuevo modelo de tipo Usuario
 var Conexion = require('./connectionController');//Declaro una variable conexión para conectarme a la base de datos MySQL
 
+//==============================>
+//======  CREATE USER  =========>
+//==============================>
 function createUser(req, res) {//Se crea una nueva función llamada createUser para registrar nuevos usuarios en el sistema
     var params = req.body;//recupero los parametros de la petición que pidio el cliente (en éste caso la petición es crear un nuevo usuario)
 
@@ -15,20 +28,96 @@ function createUser(req, res) {//Se crea una nueva función llamada createUser p
 
     //INSERTAR DATO EN LA BASE DE DATOS------>
     var sql = "INSERT INTO usuarios(nombres, apellidos, correo, clave) VALUES ('" + usuario.nombres + "', '" + usuario.apellidos + "', '" + usuario.correo + "','" + usuario.clave + "')";//declaro una variable que almacenara la petición a la base de datos, en éste caso INSERT INTO para CREAR un nuevo usuario
-    Conexion.CONNECTION.query(sql, function (err, result) {//con la variable conexion creada anteriormente accedo a la conexión para hacer una nueva consulta de tipo SQL y la ejecuto
-        if (err) throw err;//Si hay algún error, muestro el error
+    Conexion.CONNECTION.query(sql, function (error, result) {//con la variable conexion creada anteriormente accedo a la conexión para hacer una nueva consulta de tipo SQL y la ejecuto
+        if (error) throw error;//Si hay algún error, muestro el error
 
         //RESPUESTA DEL SERVIDOR CUANDO SE CREA UN USUARIO------>
         res.status(200).send({//Si no hay error preparo una nueva RESPUESTA con estado=200 que significa que todo salio bien
             message: 'Usuario creado',//en la RESPUESTA que será enviada adjunto un mensaje que dice "Usuario creado"
             result: result,//también adiciona a la RESPUESTA el resultado al insertar el registro en la base de datos
-            error: err//Y por último, si existe algún error también lo envío en la RESPUESTA
+            error: error//Y por último, si existe algún error también lo envío en la RESPUESTA
         });
 
     }
     );
 }
 
+
+//==============================>
+//======  READ USERS  ==========>
+//==============================>
+function readUsers(req, res) {//Se crea una nueva función llamada readUsers que servirá para consultar todos los usuarios registrados en la base de datos
+    var sql = "SELECT * from usuarios";//Se declara una nueva variable llamada sql la cual almacenará la consulta a la base de datos
+    Conexion.CONNECTION.query(sql, function (error, result) {////con la variable conexion creada anteriormente accedo a la conexión para hacer una nueva consulta de tipo SQL y la ejecuto
+        if (error) throw error;//Si hay algún error, muestro el error
+
+        //RESPUESTA DEL SERVIDOR CUANDO SE CREA UN USUARIO------>
+        res.status(200).send({//Si no hay error preparo una nueva RESPUESTA con estado=200 que significa que todo salio bien
+            users: result,//Adicionó a la RESPUESTA el resultado de la consulta a la base de datos
+            error: error//Adiciono a la RESPUESTA el error en caso de que exista un error
+        });
+    });
+}
+
+
+//==============================>
+//======  READ USER  ==========>
+//==============================>
+function readUser(req, res) {
+    var userId = req.params.user_id;
+    var sql = "SELECT * from usuarios where id = " + userId;
+    Conexion.CONNECTION.query(sql, function (error, result) {
+        if (error) throw error;
+        res.status(200).send({
+            users: result
+        });
+    });
+
+}
+
+
+//==============================>
+//======  UPDATE USER  =========>
+//==============================>
+function updateUser(req, res) {
+    var userId = req.params.user_id;
+    var params = req.body;
+
+    var usuario = new Usuario();
+    usuario.nombres = params.nombres;
+    usuario.apellidos = params.apellidos;
+    usuario.correo = params.correo;
+    usuario.clave = params.clave;
+    var sql = "UPDATE usuarios SET nombres = '" + usuario.nombres + "', apellidos = '" + usuario.apellidos + "', correo = '" + usuario.correo + "', clave = '" + usuario.clave + "' WHERE id = " + userId;
+
+    Conexion.CONNECTION.query(sql, function (error, result) {
+        if (error) throw error;
+        res.status(200).send({
+            users: result
+        });
+    });
+}
+
+
+//==============================>
+//======  DELETE USER  =========>
+//==============================>
+function deleteUser(req, res) {
+    var userId = req.params.user_id;
+    var sql = "DELETE FROM usuarios WHERE id = " + userId;
+
+    Conexion.CONNECTION.query(sql, function (error, result) {
+        if (error) throw error;
+        res.status(200).send({
+            message: "El usuario fué eliminado",
+            result: result
+        });
+    });
+}
 module.exports = {
-    createUser
+    createUser,
+    readUsers,
+    readUser,
+    updateUser,
+    deleteUser
 }
