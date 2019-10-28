@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="js/userController.js"></script>
+</head>
+
+<body>
+    <div id="myHtml">
+        <div>Hola <span id="usuario"></span></div>
+    </div>
+    <div onclick="logout()">
+        Cerrar sesión
+    </div>
+    <a href="listaUsuarios.html">Lista de usuarios</a>
+    <a href="actualizarUsuario.html">Actualizar perfil</a>
+</body>
+
+<script type="text/javascript">
+    var usuario = JSON.parse(sessionStorage.getItem("user"));
+    if (usuario) {
+        document.getElementById("usuario").innerHTML = usuario[0].nombres;
+    } else {
+        window.location.href = "index.html";
+    }
+    console.log();
+</script>
+
+</html>

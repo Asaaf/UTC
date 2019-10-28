@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Administrador de horarios</title>
+    <script src="js/userController.js"></script>
+</head>
+
+<body>
+    <a href="homeCalendario.html">Regresar al Home</a>
+    <h1>Actualizar datos de usuario</h1>
+    <div>
+        <input type="text" placeholder="nombres" id="nombres" />
+        <input type="text" placeholder="apellidos" id="apellidos" />
+        <input type="text" placeholder="correo" id="correo" />
+        <input type="password" placeholder="clave" id="clave" />
+        <button value="Ingresar" onclick="updateUser(userId)">Actualizar</button>
+    </div>
+</body>
+<script>
+    var usuario = JSON.parse(sessionStorage.getItem("user"));
+    var userId = usuario[0].id;
+    document.getElementById("nombres").value = usuario[0].nombres;
+    document.getElementById("apellidos").value = usuario[0].apellidos;
+    document.getElementById("correo").value = usuario[0].correo;
+    document.getElementById("clave").value = usuario[0].clave;
+</script>
+
+</html>
